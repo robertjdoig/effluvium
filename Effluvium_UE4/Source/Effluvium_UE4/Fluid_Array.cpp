@@ -21,12 +21,16 @@ void AFluid_Array::BeginPlay()
   // try and fire a projectile
   if (ProjectileClass != NULL)
   {
-    UWorld* const World = GetWorld();
+  UWorld* const World = GetWorld();
     if (World != NULL)
     {
-      const FRotator SpawnRotation = FRotator(0, 0, 0);
-      const FVector SpawnLocation = FVector(0, 0, 300);
-      World->SpawnActor<AEffluvium_UE4Projectile>(ProjectileClass, SpawnLocation, SpawnRotation);
+      for (int i = 0; i < col; i++) {
+        for (int j = 0; j < row; j++) {
+          AActor* t_ref= World->SpawnActor<AActor>(ProjectileClass, FVector(100, 100+(i*100), 400+(j*100)), FRotator::ZeroRotator);
+          refs.Add(t_ref);
+        }
+      }
+    
     }
   }
 	
@@ -37,23 +41,11 @@ void AFluid_Array::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
 
-
-  if (counter >= 59) {
-    // try and fire a projectile
-    if (ProjectileClass != NULL)
-    {
-      UWorld* const World = GetWorld();
-      if (World != NULL)
-      {
-        const FRotator SpawnRotation = FRotator(0, 0, 0);
-        const FVector SpawnLocation = FVector(0, 0, 300);
-        World->SpawnActor<AEffluvium_UE4Projectile>(ProjectileClass, SpawnLocation, SpawnRotation);
-      }
+  for (int i = 0; i < col; i++) {
+    for (int j = 0; j < row; j++) {
+      //refs[i + (col*j)]->SetActorLocation(FVector(DeltaTime * 100,0,500));
+      refs[i + (col*j)]->SetActorRelativeRotation(FRotator(DeltaTime * 100, 0,0));
     }
   }
-
-  counter++;
-  counter %= 60;
-
 }
 

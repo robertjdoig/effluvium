@@ -11,9 +11,7 @@ class EFFLUVIUM_UE4_API AFluid_Array : public AActor
 	GENERATED_BODY()
 	
 public:	
-  
-  int counter;
-	
+ 	
   // Sets default values for this actor's properties
 	AFluid_Array();
 
@@ -24,8 +22,19 @@ public:
 	virtual void Tick( float DeltaSeconds ) override;
 
   /** Projectile class to spawn */
-  UPROPERTY(EditDefaultsOnly, Category = Projectile)
-    TSubclassOf<class AEffluvium_UE4Projectile> ProjectileClass;
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Array_Ob)
+    TSubclassOf<class AActor> ProjectileClass;
 	
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Array_Ob)
+    int col;
+    
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Array_Ob)
+    int row;
+
+  AActor* ref;
+
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Array_Ob)
+  TArray<AActor*> refs;
+
 
 };
