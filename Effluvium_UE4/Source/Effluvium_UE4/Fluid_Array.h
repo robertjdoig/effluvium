@@ -54,4 +54,12 @@ public:
   void velocity_step(int N, float * u, float * v, float * u0, float * v0, float visc, float dt);
 
   int IX(int i, int j, int N);
+
+
+
+  UMaterialInstanceDynamic* test_mat; 
+
+
+
+
 };

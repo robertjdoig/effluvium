@@ -12,7 +12,7 @@ AFluid_Array::AFluid_Array()
 	PrimaryActorTick.bCanEverTick = true;
   
 
-  dimensions = FVector(30, 30, 12);
+  dimensions = FVector(40, 40, 12);
   int size = (dimensions.X + 1)*(dimensions.Y + 1);
   for (int i = 0; i < size; i++) 
   {
@@ -42,7 +42,7 @@ void AFluid_Array::BeginPlay()
       for (int i = 0; i < dimensions.X; i++) {
         for (int j = 0; j < dimensions.Y; j++) {
 
-          FTransform trans = FTransform(FRotator::ZeroRotator, FVector(10, 10 + (i * 10), 200 + (j * 10)), FVector(0.5, 0.5, 0.5));
+          FTransform trans = FTransform(FRotator::ZeroRotator, FVector(10, 10 + (i * 60), 200 + (j * 60)));
           AActor* t_ref= World->SpawnActor<AActor>(ProjectileClass, trans);
           refs.Add(t_ref);
         }
@@ -85,22 +85,32 @@ void AFluid_Array::Tick( float DeltaTime )
   float s = sin(frameCounter * 0.01f);
 
   int x = (int)dimensions.X*0.5f, y = (int) dimensions.Y*0.5f;
-  density[IX(x,y,N)] += 100 * dt;
+  density[IX(x,y,N)] += 1000 * dt;
 
-  u[IX(x,y, N)] += c * (1000 * dt);
-  v[IX(x,y,N)] += s * (1000 * dt);
+  u[IX(x,y, N)] += c * (10 * dt);
+  v[IX(x,y,N)] += s * (10 * dt);
 
   velocity_step(N, u, v, u_prev, v_prev, visc, dt);
 
   density_step(N, dens, dens_prev, u, v, diff, dt);
 
+
+
+
   for (int i = 0; i < dimensions.X; i++) 
   {
     for (int j = 0; j < dimensions.Y; j++) 
     {
+
+      TArray <UStaticMeshComponent *> Components;
+      refs[i+(dimensions.X*j)]->GetComponents<UStaticMeshComponent>(Components);
+      UMaterialInstanceDynamic* Mat = Components[0]->CreateDynamicMaterialInstance(0);
+      Mat->SetVectorParameterValue("particleColor", FLinearColor(dens[i+(int)((dimensions.X+1)*j)], 0.1, 0.1,dens[i + (int)((dimensions.X + 1)*j)]));
+      
       //std::max(0.0f, std::min(density[i + j*stride], 1.0f))
-      refs[i + (dimensions.X*j)]->SetActorRelativeRotation(FRotator(u[i + (int)(dimensions.X*j)],v[i + (int)(dimensions.X*j)],0));
+      //refs[i + (dimensions.X*j)]->SetActorRelativeRotation(FRotator(u[i + (int)(dimensions.X*j)],v[i + (int)(dimensions.X*j)],0));
       // Color** dens[i + (int)((dimensions.X+1)*j)]
+      UE_LOG(LogTemp, Log, TEXT("Message"));
     }
   }
 
