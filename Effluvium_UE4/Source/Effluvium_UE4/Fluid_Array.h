@@ -26,15 +26,25 @@ public:
     TSubclassOf<class AActor> ProjectileClass;
 	
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Array_Ob)
-    int col;
-    
-  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Array_Ob)
-    int row;
-
-  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Array_Ob)
   TArray<AActor*> refs;
 
-  void add_source();
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Array_Ob)
+  FVector dimensions;
+
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Array_Ob)
+  TArray<float> density;
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Array_Ob)
+  TArray<float> prev_density;
+
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Array_Ob)
+  TArray<float> vx;
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Array_Ob)
+  TArray<float> vy;
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Array_Ob)
+  TArray<float> prev_vx;
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Array_Ob)
+  TArray<float> prev_vy;
+
   void set_boundary(int N, int b, float * x);
   void gauss_siedel(int N, int b, float * x, float * x0, float a, float c);
   void diffuse(int N, int b, float * x, float * x0, float diff, float dt);
@@ -43,5 +53,5 @@ public:
   void density_step(int N, float * x, float * x0, float * u, float * v, float diff, float dt);
   void velocity_step(int N, float * u, float * v, float * u0, float * v0, float visc, float dt);
 
-  void fSwap(float * a, float * b);
+  int IX(int i, int j, int N);
 };
