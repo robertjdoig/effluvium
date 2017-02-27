@@ -11,8 +11,14 @@ AFluid_Array::AFluid_Array()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
   
+}
 
-  dimensions = FVector(40, 40, 12);
+// Called when the game starts or when spawned
+void AFluid_Array::BeginPlay()
+{
+	Super::BeginPlay();
+
+  //dimensions = FVector(30, 30, 12);
   int size = (dimensions.X + 1)*(dimensions.Y + 1);
   for (int i = 0; i < size; i++) 
   {
@@ -26,12 +32,6 @@ AFluid_Array::AFluid_Array()
     prev_vy.Add(0.0f);
 
   }
-}
-
-// Called when the game starts or when spawned
-void AFluid_Array::BeginPlay()
-{
-	Super::BeginPlay();
 
   // try and fire a projectile
   if (ProjectileClass != NULL)
@@ -84,14 +84,12 @@ void AFluid_Array::Tick( float DeltaTime )
   float c = cos(frameCounter * 0.01f);
   float s = sin(frameCounter * 0.01f);
 
-  int x = (int)dimensions.X*0.5f, y = (int) dimensions.Y*0.5f;
-  density[IX(x,y,N)] += 1000 * dt;
-
+  int x = (int)dimensions.X*0.5f, y = (int)dimensions.X * 0.5f;
+  density[IX(x,y,N)] += 3 * dt;
   u[IX(x,y, N)] += c * (10 * dt);
   v[IX(x,y,N)] += s * (10 * dt);
 
   velocity_step(N, u, v, u_prev, v_prev, visc, dt);
-
   density_step(N, dens, dens_prev, u, v, diff, dt);
 
 
@@ -102,11 +100,27 @@ void AFluid_Array::Tick( float DeltaTime )
     for (int j = 0; j < dimensions.Y; j++) 
     {
 
+
+      TArray<UBillboardComponent *> billboards;
+      //refs[i + (dimensions.X*j)]->GetComponents<UBillboardComponent *>(billboards);
+
+      
+
+
+
+
+
+
       TArray <UStaticMeshComponent *> Components;
       refs[i+(dimensions.X*j)]->GetComponents<UStaticMeshComponent>(Components);
       UMaterialInstanceDynamic* Mat = Components[0]->CreateDynamicMaterialInstance(0);
-      Mat->SetVectorParameterValue("particleColor", FLinearColor(dens[i+(int)((dimensions.X+1)*j)], 0.1, 0.1,dens[i + (int)((dimensions.X + 1)*j)]));
+    
+      //FLinearColor col = FLinearColor(density[i + (dimensions.X + 1)*j], 0, 0);
+      FLinearColor col = FLinearColor(FMath::Max(0.0f,FMath::Min(density[i + (dimensions.X + 1)*j],1.0f)),0, 0, density[i + (dimensions.X + 1) * j]);
+      Mat->SetVectorParameterValue("particleColor", col);
       
+      
+      //v.color = vec3p(std::max(0.0f, std::min(density[i + j*stride], 1.0f)), 0, 0);
       //std::max(0.0f, std::min(density[i + j*stride], 1.0f))
       //refs[i + (dimensions.X*j)]->SetActorRelativeRotation(FRotator(u[i + (int)(dimensions.X*j)],v[i + (int)(dimensions.X*j)],0));
       // Color** dens[i + (int)((dimensions.X+1)*j)]
