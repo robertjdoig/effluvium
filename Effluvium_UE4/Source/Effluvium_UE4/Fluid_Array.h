@@ -55,10 +55,6 @@ public:
 
   int IX(int i, int j, int N);
 
-
-
-  UMaterialInstanceDynamic* test_mat; 
-
-
+  
 
 };

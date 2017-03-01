@@ -42,7 +42,7 @@ void AFluid_Array::BeginPlay()
       for (int i = 0; i < dimensions.X; i++) {
         for (int j = 0; j < dimensions.Y; j++) {
 
-          FTransform trans = FTransform(FRotator::ZeroRotator, FVector(10, 10 + (i * 60), 200 + (j * 60)));
+          FTransform trans = FTransform(FRotator::ZeroRotator, FVector(10, 10 + (i * 20), 200 + (j * 20)));
           AActor* t_ref= World->SpawnActor<AActor>(ProjectileClass, trans);
           refs.Add(t_ref);
         }
@@ -99,17 +99,6 @@ void AFluid_Array::Tick( float DeltaTime )
   {
     for (int j = 0; j < dimensions.Y; j++) 
     {
-
-
-      TArray<UBillboardComponent *> billboards;
-      //refs[i + (dimensions.X*j)]->GetComponents<UBillboardComponent *>(billboards);
-
-      
-
-
-
-
-
 
       TArray <UStaticMeshComponent *> Components;
       refs[i+(dimensions.X*j)]->GetComponents<UStaticMeshComponent>(Components);
