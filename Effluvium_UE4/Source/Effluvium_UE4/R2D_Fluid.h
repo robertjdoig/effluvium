@@ -48,6 +48,13 @@ public:
   int IX(int i, int j, int N);
 
 
+  /** UI TESTING */
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Testing)
+    float vx_speed;
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Testing)
+    float vy_speed;
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Testing)
+    float density_amount;
 
 
 

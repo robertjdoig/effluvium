@@ -60,19 +60,21 @@ void AR2D_Fluid::Tick(float DeltaTime)
     prev_vy[i] = 0.0f;
   }
 
-  float c = cos(frameCounter * 0.01f);
-  float s = sin(frameCounter * 0.01f);
+  float c = cos(frameCounter * 0.1f);
+  float s = sin(frameCounter * 0.1f);
 
-  int x = (int)dimensions.X*0.5f, y = (int)dimensions.X * 0.5f;
-  density[IX(x, y, N)] += 3 * dt;
-  u[IX(x, y, N)] += c * (10 * dt);
-  v[IX(x, y, N)] += s * (10 * dt);
+  int x = 1, y = 1;
+  density[IX(x, y, N)] += density_amount * dt;
+  u[IX(x, y, N)] += c * (vx_speed *dt);
+  v[IX(x, y, N)] += s * (vy_speed * dt);
+
 
   velocity_step(N, u, v, u_prev, v_prev, visc, dt);
   density_step(N, dens, dens_prev, u, v, diff, dt);
 
 
 
+  //density[IX(3, 5, N)] -= density_amount * dt;
 
   for (int i = 0; i < dimensions.X; i++)
   {
@@ -84,7 +86,7 @@ void AR2D_Fluid::Tick(float DeltaTime)
       //FLinearColor col = FLinearColor(FMath::Max(0.0f, FMath::Min(density[i + (dimensions.X + 1)*j], 1.0f)), 0, 0, density[i + (dimensions.X + 1) * j]);
       //Mat->SetVectorParameterValue("particleColor", col);
 
-      Vertics24x24[i+(23 *j)].Y = FMath::Max(0.0f, FMath::Min(density[i + (dimensions.X + 1)*j], 1.0f));
+      Vertics6x6[i + (6 * (j))].Y = FMath::Max(0.0f, FMath::Min(density[i + (dimensions.X + 1)*j], 1.0f)); //FMath::Max(0.0f, FMath::Min(density[(i+1) + (dimensions.X+1)*(j+1)], 1.0f));
       
       //v.color = vec3p(std::max(0.0f, std::min(density[i + j*stride], 1.0f)), 0, 0);
       //std::max(0.0f, std::min(density[i + j*stride], 1.0f))
