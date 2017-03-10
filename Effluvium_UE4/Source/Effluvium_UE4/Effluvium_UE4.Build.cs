@@ -7,5 +7,8 @@ public class Effluvium_UE4 : ModuleRules
 	public Effluvium_UE4(TargetInfo Target)
 	{
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay" });
-	}
+
+        /** Adding Dependency Modules for Dynamic Material Creatation*/
+        PublicDependencyModuleNames.AddRange(new string[] { "RHI", "RenderCore" });
+    }
 }
